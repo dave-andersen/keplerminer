@@ -18,6 +18,7 @@ double timeval_diff(const struct timeval * const start, const struct timeval * c
 
 
 int main() {
+  static const int n_attempts = 200000; // todo:  command line this
 
   printf("cudacoin hasher starting\n");
 
@@ -31,23 +32,24 @@ int main() {
   }
 
   uint32_t job[32];
-  uint32_t target[8];
+  /* Initializing the job in the same way cpuminer did for comparability */
   for (int i = 0; i < 32; i++) {
     job[i] = 0x55555555;
   }
   job[19] = 0;
   job[20] = 0x80000000;
   job[31] = 0x00000280;
-  bzero(target, sizeof(target));
+  
+  uint32_t target[8];
   /* The current litecoin mining difficulty as of 11/2013 - just for fun */
   uint32_t ttmp[]= { 0xCCCCCCCC, 0xCCCCCCCC, 0xCCCCCCCC, 0xCCCCCCCC, 0xCCCCCCCC, 0xCCCCCCCC, 0x369CCC, 0x0 };
   memcpy(target, ttmp, sizeof(uint32_t)*8);
+
   gettimeofday(&tv_start, NULL);
-  static const int n_attempts = 200000;
   int stop = 0;
   int rc = h->ScanNCoins(job, target, n_attempts, &stop, NULL);
-  gettimeofday(&tv_end, NULL);
 
+  gettimeofday(&tv_end, NULL);
   double n_sec = timeval_diff(&tv_start, &tv_end);
 
   printf("%d hashes in %2.2f seconds (%2.2f kh/s)\n", 
