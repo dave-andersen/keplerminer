@@ -1,0 +1,27 @@
+  /* Basic litecoin algorithm:
+
+     Let data be an 80 byte chunk of work to do.
+
+     sha256_init(midstate)
+        . Copies sha256_k  (uint32_t * 64) into midstate.
+	
+     sha256_transform(midstate, data, 0);
+        . The sha256 block compression function.  Accepts a 512 bit input
+	.  block and updates state.
+	.  This is invariant across nonces, because the nonce is in the
+	   second 512 bit (padded) block.  So save it and do
+	   computations from there.
+
+	foreach block, increment data[19] - the nonce.
+
+      . input, output, midstate, scratchpad (input =data)
+
+     uint32_t tstate[8] = midstate;
+     HMAC_SHA256_80_init(data, tstate, ostate);
+     PBKDF2_SHA256_80_128(tstate, ostate, data, X);
+     scrypt_core(X);
+     PBKDF2_SHA256_128_32(tstate, ostate, X, output);
+
+     This is a successful hash if output[7] <= htarg &&
+       fulltest(hash, ptarget) succeeds.
+  */

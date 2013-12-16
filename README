@@ -1,0 +1,45 @@
+Cudacoin is a Kepler-and-later optimized implementation
+of scrypt-based coin mining (Litecoin, etc.) for Nvidia
+GPUs.  It _requires_ kepler (compute_30) or later
+and will not compile for older architectures.
+
+As a proof of concept, building this code will produce
+two binaries that can be run:
+  - hasher_bench
+  - hasher_test
+
+By default, hasher_bench will scan 200,000 keys and show
+the time and Kh/s rate achieved in doing so.
+
+hasher_test tests that scanning and several of the
+individual components of the system work properly.
+
+In addition, it will build key_per_thread, which is a 
+naive mining implementation that I wrote for comparison.
+It is not particularly useful.
+
+This is not a standalone miner:  The main result of
+compiling it is a shared object (.so) file, hasher_c.so,
+which must then be linked into cpuminer with a modified 
+implementation of cpuminer/scrypt.c.  (file "scrypt.c")
+
+TODO:  Pull in cpuminer or write a better one.  I lean towards
+the latter:  cpuminer's structure is very geared towards
+efficiently using the CPUs for mining, with a lot of very
+unnecessary complexity when it's simply farming out to GPUs.
+It's possible that cgminer might be a better starting point.
+
+Before compiling:
+  Ensure that "nvcc" is in your $PATH.
+
+To compile:
+  make
+  cp scrypt.c hasher_c.o hasher_c.h hasher.o ../cpuminer/
+  cd ../cpuminer/
+  make
+    * look for the error message about not finding scanhash_c
+    * copy/paste that gcc line and add hasher_c.so at the end
+
+Yes.  This is really lame, and what you get from a proof-of-concept
+piece of code instead of something designed to be easy to use.  Sorry.
+Patches accepted. :-)

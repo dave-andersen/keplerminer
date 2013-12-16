@@ -1,0 +1,30 @@
+Small list of variants encountered along the optimization path:
+
+1)  Improving ILP by running two keys at a time in each group.
+    - Didn't work.  The extra register pressure slowed things
+    down relative to the simpler version.  It also uses
+    more memory, which was bad on the Tesla.
+
+2)  Using shared memory for exchanging key-parts during
+    salsa and for reading/writing.  Shuffle is substantially
+    faster.  The reading/writing shared mem functions are
+    still in the git history, but I've removed them from the
+    code.
+
+3)  NOTDONE / NOTNEEDED
+
+    Inside salsa_xor_core:
+
+    There is a minor possible optimization to reduce a register
+    assignment, but it only matters if the compiler isn't being smart
+    enough.  Probably not worth doing:  unroll the inner loop once
+    to replace the src x[i] with b[i] where appropriate, eliminating
+    the x[i] = b[i] assignment above.  Hopefully nvcc is doing this already.
+
+4)  Reduce register pressure in scrypt_hash_finish_kernel
+    (NOTDONE:  Only 1% of runtime here.)
+
+    This function reads ostate and tstate before doing any processing,
+    but it could defer the read of ostate until after most of the
+    PBKDF cleanup.  This would let it use (at least) eight fewer
+    registers.  Untested, but on the radar.
