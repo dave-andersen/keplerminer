@@ -1,3 +1,9 @@
+/* Copyright (C) 2013 David G. Andersen.  All rights reserved.
+ *
+ * Use of this code is covered under the Apache 2.0 license, which
+ * can be found in the file "LICENSE"
+ */
+
 #include <sys/time.h>
 #include "hasher.h"
 #include "scrypt_cores.cu"
