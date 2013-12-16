@@ -43,3 +43,8 @@ To compile:
 Yes.  This is really lame, and what you get from a proof-of-concept
 piece of code instead of something designed to be easy to use.  Sorry.
 Patches accepted. :-)
+
+My code is covered under the Apache license.  This project includes
+several files from Colin Percival's tarsnap project, which are covered
+under their own license, which is BSD-like.  Please see individual
+files.  If not otherwise specified, Apache.
