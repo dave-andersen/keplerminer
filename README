@@ -1,4 +1,4 @@
-Cudacoin is a Kepler-and-later optimized implementation
+Keplerminer is a Kepler-and-later optimized implementation
 of scrypt-based coin mining (Litecoin, etc.) for Nvidia
 GPUs.  It _requires_ kepler (compute_30) or later
 and will not compile for older architectures.
