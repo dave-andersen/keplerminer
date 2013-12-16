@@ -55,9 +55,5 @@ int main() {
 	 n_sec,
 	 (n_attempts/n_sec)/1000);
   printf("Done\n");
-#if 0
-    free(keys_in);
-  free(keys_out);
-#endif
   delete h;
 }
